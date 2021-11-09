@@ -16,10 +16,10 @@ class TimeWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.init_ui()
-        self._maximumTime = QTime(23, 59, 59, 999)
-        self._minimumTime = QTime(0, 0, 0, 0)
+        self.__maximumTime = QTime(23, 59, 59, 999)
+        self.__minimumTime = QTime(0, 0, 0, 0)
         # self._timeSpec = Qt.TimeSpec.LocalTime
-        self.setup_time()
+        self.setupTime()
 
     def init_ui(self):
         self.setObjectName("TimeWidget")
@@ -126,7 +126,7 @@ class TimeWidget(QWidget):
         self.msecLabel.setText(QApplication.translate("TimeWidget", "ms:", None, -1))
 
     def minimumTime(self):
-        return self._minimumTime
+        return self.__minimumTime
 
     def setMinimumTime(self, min_time):
         if not isinstance(min_time, QTime):
@@ -137,15 +137,15 @@ class TimeWidget(QWidget):
                 Supported signatures:\n\t
                 TimeWidget.setMinimumTime(PySide2.QtCore.QTime)"""
             )
-        self._minimumTime = min_time
-        self.setup_time()
+        self.__minimumTime = min_time
+        self.setupTime()
 
     def clearMinimumTime(self):
-        self._minimumTime = QTime(0, 0, 0, 0)
-        self.setup_time()
+        self.__minimumTime = QTime(0, 0, 0, 0)
+        self.setupTime()
 
     def maximumTime(self):
-        return self._maximumTime
+        return self.__maximumTime
 
     def setMaximumTime(self, max_time):
         if not isinstance(max_time, QTime):
@@ -156,31 +156,17 @@ class TimeWidget(QWidget):
                 Supported signatures:\n\t
                 TimeWidget.setMaximumTime(PySide2.QtCore.QTime)"""
             )
-        self._maximumTime = max_time
-        self.setup_time()
+        self.__maximumTime = max_time
+        self.setupTime()
 
     def clearMaximumTime(self):
-        self._maximumTime = QTime(23, 59, 59, 999)
-        self.setup_time()
+        self.__maximumTime = QTime(23, 59, 59, 999)
+        self.setupTime()
 
-    # def timeSpec(self):
-    #     return self._timeSpec
-    #
-    # def setTimeSpec(self, spec):
-    #     if not isinstance(spec, Qt.TimeSpec):
-    #         spec_type = str(type(spec)).split("'")[1]
-    #         raise TypeError(
-    #             f"""'TimeWidget.setTimeSpec' called with wrong argument types:\n\t
-    #             TimeWidget.setTimeSpec({spec_type})\n\t\t
-    #             Supported signatures:\n\t
-    #             TimeWidget.setTimeSpec(PySide2.QtCore.Qt.TimeSpec)"""
-    #         )
-    #     self._timeSpec = spec
-
-    def setup_time(self):
-        hours = [QListWidgetItem(str(i)) for i in range(self._minimumTime.hour(), self._maximumTime.hour() + 1)]
-        minutes = [QListWidgetItem(str(i)) for i in range(self._minimumTime.minute(), self._maximumTime.minute() + 1)]
-        seconds = [QListWidgetItem(str(i)) for i in range(self._minimumTime.second(), self._maximumTime.second() + 1)]
+    def setupTime(self):
+        hours = [QListWidgetItem(str(i)) for i in range(self.__minimumTime.hour(), self.__maximumTime.hour() + 1)]
+        minutes = [QListWidgetItem(str(i)) for i in range(self.__minimumTime.minute(), self.__maximumTime.minute() + 1)]
+        seconds = [QListWidgetItem(str(i)) for i in range(self.__minimumTime.second(), self.__maximumTime.second() + 1)]
         for time_widget, time_list in zip(
                 [
                     self.hourListWidget,
@@ -194,7 +180,7 @@ class TimeWidget(QWidget):
                 time_widget.addItem(item)
             time_widget.setCurrentItem(time_list[0])
         int_val = QIntValidator()
-        int_val.setRange(self._minimumTime.msec(), self._maximumTime.msec())
+        int_val.setRange(self.__minimumTime.msec(), self.__maximumTime.msec())
         self.msecLineEdit.setValidator(int_val)
 
     def reset(self):
@@ -203,7 +189,7 @@ class TimeWidget(QWidget):
         self.secListWidget.setCurrentRow(0)
         self.msecLineEdit.setText("")
 
-    def set_today(self):
+    def setToday(self):
         now = QTime.currentTime()
         self.hourListWidget.setCurrentRow(now.hour())
         self.minListWidget.setCurrentRow(now.minute())

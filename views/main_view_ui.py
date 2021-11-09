@@ -11,8 +11,8 @@
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 
-from date_time_edit.custom_date_time_edit import DateTimeEdit
-from date_time_edit.settings import Mode
+from ClearableDateTimeEdit.DateTimeEdit import DateTimeEdit
+from ClearableDateTimeEdit.Settings import Mode
 
 
 class Ui_MainWindow(object):
@@ -47,7 +47,7 @@ class Ui_MainWindow(object):
         self.vboxLayout.addWidget(self.date_time_edit_ps)
 
         self.date_time_edit = DateTimeEdit(self.centralwidget, Mode.datetime)
-        self.date_time_edit.setObjectName(u"date_time_edit")
+        self.date_time_edit.setObjectName(u"ClearableDateTimeEdit")
         self.date_time_edit.calendarWidget().setLocale(QLocale.English)
         self.vboxLayout.addWidget(self.date_time_edit)
 
@@ -57,10 +57,11 @@ class Ui_MainWindow(object):
 
         self.time_edit = DateTimeEdit(self.centralwidget, Mode.time)
         self.time_edit.setObjectName(u"time_edit")
-        self.time_edit.setDisplayFormat("'Std:'hh 'Min:'mm Sec:ss")
+        self.time_edit.setDisplayFormat("hh:mm:ss")
         self.vboxLayout.addWidget(self.time_edit)
 
         self.date_time_edit_wp = DateTimeEdit(self.centralwidget)
+        self.date_time_edit_wp.setMode(Mode.time)
         self.date_time_edit_wp.setCalendarPopup(False)
         self.date_time_edit_wp.setObjectName(u"date_time_edit_wp")
         self.vboxLayout.addWidget(self.date_time_edit_wp)

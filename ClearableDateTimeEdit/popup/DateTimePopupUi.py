@@ -8,11 +8,10 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtWidgets
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QWidget
 
-from date_time_edit.popup.time_widget import TimeWidget
+from ClearableDateTimeEdit.popup.TimeWidget import TimeWidget
 
 
 class DateTimePopupUi(object):
@@ -47,56 +46,6 @@ class DateTimePopupUi(object):
         self.calendarWidget.setStyleSheet("margin: 0px;")
         self.calendarWidget.setObjectName("calendarWidget")
         self.horizontalLayout_2.addWidget(self.calendarWidget)
-
-        # self.verticalLayout = QtWidgets.QVBoxLayout()
-        # self.verticalLayout.setObjectName("verticalLayout")
-        # self.label = QtWidgets.QLabel(Form)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        # self.label.setSizePolicy(sizePolicy)
-        # self.label.setMinimumSize(QtCore.QSize(0, 22))
-        # font = QtGui.QFont()
-        # font.setWeight(75)
-        # font.setBold(True)
-        # self.label.setFont(font)
-        # self.label.setStyleSheet("background-color: rgb(0, 122, 212);\n"
-        #                          "color: rgb(255, 255, 255);\n"
-        #                          "margin: 0px;")
-        # self.label.setAlignment(QtCore.Qt.AlignCenter)
-        # self.label.setObjectName("label")
-        # self.verticalLayout.addWidget(self.label)
-        # self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        # self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        # self.hourListWidget = QtWidgets.QListWidget(Form)
-        # # self.hourListWidget.setMaximumSize(QtCore.QSize(50, 16777215))
-        # self.hourListWidget.setStyleSheet("margin: 0px;")
-        # self.hourListWidget.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        # self.hourListWidget.setObjectName("hourListWidget")
-        # self.horizontalLayout_3.addWidget(self.hourListWidget)
-        # self.minListWidget = QtWidgets.QListWidget(Form)
-        # # self.minListWidget.setMaximumSize(QtCore.QSize(50, 16777215))
-        # self.minListWidget.setObjectName("minListWidget")
-        # self.horizontalLayout_3.addWidget(self.minListWidget)
-        # self.secListWidget = QtWidgets.QListWidget(Form)
-        # # self.secListWidget.setMaximumSize(QtCore.QSize(50, 16777215))
-        # self.secListWidget.setObjectName("secListWidget")
-        # self.horizontalLayout_3.addWidget(self.secListWidget)
-        # self.verticalLayout.addLayout(self.horizontalLayout_3)
-        # self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
-        # self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        # self.comboBox = QtWidgets.QComboBox(Form)
-        # # self.comboBox.setMaximumSize(QtCore.QSize(50, 16777215))
-        # self.comboBox.setObjectName("comboBox")
-        # self.horizontalLayout_6.addWidget(self.comboBox)
-        # self.msecLineEdit = QtWidgets.QLineEdit(Form)
-        # self.msecLineEdit.setPlaceholderText("msec")
-        # self.msecLineEdit.setObjectName("msecLineEdit")
-        # self.horizontalLayout_6.addWidget(self.msecLineEdit)
-        # self.verticalLayout.addLayout(self.horizontalLayout_6)
-        # self.horizontalLayout_2.addLayout(self.verticalLayout)
-
         self.timeWidget = TimeWidget(Form)
         self.horizontalLayout_2.addWidget(self.timeWidget)
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
@@ -124,7 +73,6 @@ class DateTimePopupUi(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QtWidgets.QApplication.translate("Form", "Form", None, -1))
-        # self.label.setText(QtWidgets.QApplication.translate("Form", "Time", None, -1))
         self.nowButton.setText(QtWidgets.QApplication.translate("Form", "Now", None, -1))
         self.clearButton.setText(QtWidgets.QApplication.translate("Form", "Clear", None, -1))
         self.submitButton.setText(QtWidgets.QApplication.translate("Form", "Ok", None, -1))

@@ -4,18 +4,21 @@ __all__ = ["TimeWidget"]
 from PySide2.QtCore import QSize, Qt, QTime
 from PySide2.QtGui import QFont, QIntValidator
 from PySide2.QtWidgets import (
-    QWidget,
-    QLabel,
-    QVBoxLayout,
-    QSizePolicy,
+    QApplication,
     QHBoxLayout,
+    QLabel,
+    QLineEdit,
     QListWidget,
-    QLineEdit, QApplication, QListWidgetItem,
+    QListWidgetItem,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
 )
 
 
 class TimeWidget(QWidget):
     """This class contains functionality of time widget."""
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.init_ui()
@@ -51,9 +54,7 @@ class TimeWidget(QWidget):
         font.setBold(True)
         self.timeLabel.setFont(font)
         self.timeLabel.setStyleSheet(
-            "background-color: rgb(0, 122, 212);\n"
-            "color: rgb(255, 255, 255);\n"
-            "margin: 0px;"
+            "background-color: rgb(0, 122, 212);\n" "color: rgb(255, 255, 255);\n" "margin: 0px;"
         )
         self.timeLabel.setAlignment(Qt.AlignCenter)
         self.timeLabel.setObjectName("timeLabel")
@@ -206,12 +207,12 @@ class TimeWidget(QWidget):
         minutes = [QListWidgetItem(str(i)) for i in range(self.__minimumTime.minute(), self.__maximumTime.minute() + 1)]
         seconds = [QListWidgetItem(str(i)) for i in range(self.__minimumTime.second(), self.__maximumTime.second() + 1)]
         for time_widget, time_list in zip(
-                [
-                    self.hourListWidget,
-                    self.minListWidget,
-                    self.secListWidget,
-                ],
-                [hours, minutes, seconds],
+            [
+                self.hourListWidget,
+                self.minListWidget,
+                self.secListWidget,
+            ],
+            [hours, minutes, seconds],
         ):
             time_widget.clear()
             for item in time_list:

@@ -6,13 +6,18 @@ __all__ = ["ClearableDateTimeEdit"]
 from typing import Union
 
 from PySide2 import QtCore, QtGui
-from PySide2.QtCore import QDate, QDateTime, QTime, Qt
-from PySide2.QtGui import QResizeEvent, QFocusEvent, QKeyEvent
-from PySide2.QtWidgets import QToolButton, QStyle, QCalendarWidget, QLineEdit, QDateTimeEdit
+from PySide2.QtCore import QDate, QDateTime, Qt, QTime
+from PySide2.QtGui import QFocusEvent, QKeyEvent, QResizeEvent
+from PySide2.QtWidgets import (
+    QCalendarWidget,
+    QDateTimeEdit,
+    QLineEdit,
+    QStyle,
+    QToolButton,
+)
 
+from ClearableDateTimeEdit.popup import DateTimePopup, TimeWidget
 from ClearableDateTimeEdit.Settings import Mode
-from ClearableDateTimeEdit.popup import DateTimePopup
-from ClearableDateTimeEdit.popup import TimeWidget
 
 
 class ClearableDateTimeEdit(QLineEdit):
@@ -45,16 +50,10 @@ class ClearableDateTimeEdit(QLineEdit):
         frameWidth = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
         buttonSize = self.__popupBtn.sizeHint()
 
-        self.setStyleSheet(
-            "QLineEdit {padding-right: %dpx; }" % (buttonSize.width() + frameWidth + 1)
-        )
+        self.setStyleSheet("QLineEdit {padding-right: %dpx; }" % (buttonSize.width() + frameWidth + 1))
         self.setMinimumSize(
-            max(
-                self.minimumSizeHint().width(), buttonSize.width() + frameWidth * 2 + 2
-            ),
-            max(
-                self.minimumSizeHint().height(), buttonSize.height() + frameWidth * 2 + 2
-            ),
+            max(self.minimumSizeHint().width(), buttonSize.width() + frameWidth * 2 + 2),
+            max(self.minimumSizeHint().height(), buttonSize.height() + frameWidth * 2 + 2),
         )
         self.__popup.ui.submitButton.clicked.connect(self.__submit)
         self.__popup.ui.cancelButton.clicked.connect(self.__close)
@@ -110,7 +109,9 @@ class ClearableDateTimeEdit(QLineEdit):
         self.__popup.close()
         self.__dateTimeEdit.setDateTime(self.__dateTimeEdit.dateTimeFromText(dt_text))
         self.dateTimeChanged.emit(self.__dateTimeEdit.dateTime())
-        self.__checkAndSendSignal(self.__dateTimeEdit.dateTimeFromText(self.__dateTimeText), self.__dateTimeEdit.dateTime())
+        self.__checkAndSendSignal(
+            self.__dateTimeEdit.dateTimeFromText(self.__dateTimeText), self.__dateTimeEdit.dateTime()
+        )
         self.__dateTimeText = dt_text
 
     def __close(self):
@@ -168,7 +169,9 @@ class ClearableDateTimeEdit(QLineEdit):
                     self.__popup.dtHelper.setDateTime(dt)
                     self.editingFinished.emit(self.__popup.dtHelper.getDateTime())
                     self.dateTimeChanged.emit(dt)
-                    self.__checkAndSendSignal(self.__dateTimeEdit.dateTimeFromText(self.__dateTimeText), self.__dateTimeEdit.dateTime())
+                    self.__checkAndSendSignal(
+                        self.__dateTimeEdit.dateTimeFromText(self.__dateTimeText), self.__dateTimeEdit.dateTime()
+                    )
                     self.__dateTimeText = fixed_dt
             self.setText(self.__dateTimeText)
 

@@ -5,9 +5,9 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Union
 
-from PySide2.QtCore import QTime, QDateTime, QObject, QSize, QRegExp, QDate
+from PySide2.QtCore import QDate, QDateTime, QObject, QRegExp, QSize, QTime
 from PySide2.QtGui import QRegExpValidator
-from PySide2.QtWidgets import QListWidgetItem, QTimeEdit, QDateTimeEdit, QDateEdit
+from PySide2.QtWidgets import QDateEdit, QDateTimeEdit, QListWidgetItem, QTimeEdit
 
 
 class AbstractHelper(QObject):
@@ -93,13 +93,11 @@ class AbstractHelper(QObject):
 
 class CustomDateHelper(AbstractHelper):
     """Class with methods handling the settings or date inputs depending on date mode."""
+
     def __init__(self, parent):
         super().__init__(parent)
         self.__parent = parent
-        self.__icon = str(
-            Path(__file__).resolve().parent
-            / r"..\resources\icon\datepicker-widget-icons_calendar.svg"
-        )
+        self.__icon = str(Path(__file__).resolve().parent / r"..\resources\icon\datepicker-widget-icons_calendar.svg")
         self.__format = "dd.MM.yyyy"
 
     @property
@@ -177,13 +175,11 @@ class CustomDateHelper(AbstractHelper):
 
 class CustomTimeHelper(AbstractHelper):
     """Class with methods handling the settings or time inputs depending on time mode."""
+
     def __init__(self, parent):
         super().__init__(parent)
         self.__parent = parent
-        self.__icon = str(
-            Path(__file__).resolve().parent
-            / r"..\resources\icon\datepicker-widget-icons_clock.svg"
-        )
+        self.__icon = str(Path(__file__).resolve().parent / r"..\resources\icon\datepicker-widget-icons_clock.svg")
         self.__format = "HH:mm:ss"
 
     @property
@@ -232,9 +228,7 @@ class CustomTimeHelper(AbstractHelper):
         selected_hour = self.__parent.timeWidget.hourListWidget.selectedItems()[0].text()
         selected_min = self.__parent.timeWidget.minListWidget.selectedItems()[0].text()
         selected_sec = self.__parent.timeWidget.secListWidget.selectedItems()[0].text()
-        return QTime.fromString(
-            f"{selected_hour}:{selected_min}:{selected_sec}", "h:m:s"
-        )
+        return QTime.fromString(f"{selected_hour}:{selected_min}:{selected_sec}", "h:m:s")
 
     def setDateTime(self, datetime: QTime):
         """Sets time in calendar pop-up.
@@ -266,12 +260,12 @@ class CustomTimeHelper(AbstractHelper):
 
 class CustomDateTimeHelper(AbstractHelper):
     """Class with methods handling the settings or date and time inputs depending on datetime mode."""
+
     def __init__(self, parent):
         super().__init__(parent)
         self.__parent = parent
         self.__icon = str(
-            Path(__file__).resolve().parent
-            / r"..\resources\icon\datepicker-widget-icons_calendar+clock.svg"
+            Path(__file__).resolve().parent / r"..\resources\icon\datepicker-widget-icons_calendar+clock.svg"
         )
         self.__format = "dd.MM.yyyy HH:mm:ss"
 

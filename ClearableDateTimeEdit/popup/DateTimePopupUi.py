@@ -12,6 +12,7 @@ from ClearableDateTimeEdit.popup.TimeWidget import TimeWidget
 
 class DateTimePopupUi(object):
     """This class contains layout of calendar pop-ups ui."""
+
     def __init__(self):
         super(DateTimePopupUi, self).__init__()
 

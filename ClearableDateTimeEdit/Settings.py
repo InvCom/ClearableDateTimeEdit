@@ -6,6 +6,7 @@ from enum import Enum
 
 class Mode(Enum):
     """Possible modes of DateTimeEdit widget."""
+
     date = "date"
     datetime = "datetime"
     time = "time"

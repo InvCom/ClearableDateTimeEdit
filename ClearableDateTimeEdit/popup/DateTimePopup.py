@@ -1,16 +1,24 @@
 # -*- coding: utf-8 -*-
 """This module contains implementation of calendar pop-ups."""
 __all__ = ["DateTimePopup"]
-from PySide2.QtCore import QObject, QDate
-from PySide2.QtWidgets import QWidget, QCalendarWidget
+from PySide2.QtCore import QDate, QObject
+from PySide2.QtWidgets import QCalendarWidget, QWidget
 
+from ClearableDateTimeEdit.popup.DateTimePopupUi import (
+    DateTimePopupUi as _DateTimePopupUi,
+)
+from ClearableDateTimeEdit.popup.Helpers import (
+    AbstractHelper,
+    CustomDateHelper,
+    CustomDateTimeHelper,
+    CustomTimeHelper,
+)
 from ClearableDateTimeEdit.Settings import Mode
-from ClearableDateTimeEdit.popup.DateTimePopupUi import DateTimePopupUi as _DateTimePopupUi
-from ClearableDateTimeEdit.popup.Helpers import CustomTimeHelper, CustomDateTimeHelper, CustomDateHelper, AbstractHelper
 
 
 class DateTimePopup(QWidget):
     """This class contains functionality of calendar pop-ups."""
+
     def __init__(self, mode: Mode, parent):
         super(DateTimePopup, self).__init__(parent)
         self.ui = _DateTimePopupUi()

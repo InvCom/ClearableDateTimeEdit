@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""This module contains implementation of time widget."""
 __all__ = ["TimeWidget"]
 from PySide2.QtCore import QSize, Qt, QTime
 from PySide2.QtGui import QFont, QIntValidator
@@ -14,6 +15,7 @@ from PySide2.QtWidgets import (
 
 
 class TimeWidget(QWidget):
+    """This class contains functionality of time widget."""
     def __init__(self, parent=None):
         super().__init__(parent)
         self.init_ui()
@@ -23,6 +25,7 @@ class TimeWidget(QWidget):
         self.setupTime()
 
     def init_ui(self):
+        """Initializes ui layout."""
         self.setObjectName("TimeWidget")
         # self.resize(200, 210)
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -126,10 +129,25 @@ class TimeWidget(QWidget):
         self.secLabel.setText(QApplication.translate("TimeWidget", "s", None, -1))
         self.msecLabel.setText(QApplication.translate("TimeWidget", "ms:", None, -1))
 
-    def minimumTime(self):
+    def minimumTime(self) -> QTime:
+        """Gets minimum time.
+
+        Returns:
+            QTime: Minimum time.
+
+        """
         return self.__minimumTime
 
-    def setMinimumTime(self, min_time):
+    def setMinimumTime(self, min_time: QTime):
+        """Sets minimum time.
+
+        Args:
+            min_time (QTime): New minimum time as QTime.
+
+        Raises:
+            TypeError if given time is not QTime.
+
+        """
         if not isinstance(min_time, QTime):
             min_type = str(type(min_time)).split("'")[1]
             raise TypeError(
@@ -142,13 +160,29 @@ class TimeWidget(QWidget):
         self.setupTime()
 
     def clearMinimumTime(self):
+        """Sets minimum time to 0:0:0.000."""
         self.__minimumTime = QTime(0, 0, 0, 0)
         self.setupTime()
 
-    def maximumTime(self):
+    def maximumTime(self) -> QTime:
+        """Gets maximum time.
+
+        Returns:
+            QTime: Maximum time.
+
+        """
         return self.__maximumTime
 
-    def setMaximumTime(self, max_time):
+    def setMaximumTime(self, max_time: QTime):
+        """Sets maximum time.
+
+        Args:
+            max_time (QTime): New maximum time as QTime.
+
+        Raises:
+            TypeError if given time is not QTime.
+
+        """
         if not isinstance(max_time, QTime):
             max_type = str(type(max_time)).split("'")[1]
             raise TypeError(
@@ -161,10 +195,13 @@ class TimeWidget(QWidget):
         self.setupTime()
 
     def clearMaximumTime(self):
+        """Sets minimum time to 23:59:59.999."""
         self.__maximumTime = QTime(23, 59, 59, 999)
         self.setupTime()
 
     def setupTime(self):
+        """Creates the lists for hours, minutes and seconds based on the minimum and maximum time and fills the time
+        widget with the lists."""
         hours = [QListWidgetItem(str(i)) for i in range(self.__minimumTime.hour(), self.__maximumTime.hour() + 1)]
         minutes = [QListWidgetItem(str(i)) for i in range(self.__minimumTime.minute(), self.__maximumTime.minute() + 1)]
         seconds = [QListWidgetItem(str(i)) for i in range(self.__minimumTime.second(), self.__maximumTime.second() + 1)]
@@ -185,12 +222,14 @@ class TimeWidget(QWidget):
         self.msecLineEdit.setValidator(int_val)
 
     def reset(self):
+        """Resets the selection in the time widget."""
         self.hourListWidget.setCurrentRow(0)
         self.minListWidget.setCurrentRow(0)
         self.secListWidget.setCurrentRow(0)
         self.msecLineEdit.setText("")
 
     def setToday(self):
+        """Sets time in time widget to current time."""
         now = QTime.currentTime()
         self.hourListWidget.setCurrentRow(now.hour())
         self.minListWidget.setCurrentRow(now.minute())
@@ -198,10 +237,23 @@ class TimeWidget(QWidget):
         self.msecLineEdit.setText(str(now.msec()))
 
     def showMsec(self, show: bool = True):
+        """Shows or hides milliseconds.
+
+        Args:
+            show (bool, optional): Flag for showing milliseconds. If the flag is True, the milliseconds are shown,
+                otherwise they are hidden.
+
+        """
         self.msecLineEdit.setVisible(show)
         self.msecLabel.setVisible(show)
 
-    def setTime(self, new_time):
+    def setTime(self, new_time: QTime):
+        """Sets time in time widget to given time.
+
+        Args:
+            new_time (QTime): Time.
+
+        """
         self.hourListWidget.setCurrentRow(new_time.hour())
         self.minListWidget.setCurrentRow(new_time.minute())
         self.secListWidget.setCurrentRow(new_time.second())

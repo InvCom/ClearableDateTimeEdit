@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
+"""The module contains the implementation of the DataTimeEdit widget."""
 
 __all__ = ["ClearableDateTimeEdit"]
 
+from typing import Union
+
 from PySide2 import QtCore, QtGui
-from PySide2.QtCore import QDate, QDateTime, QTime
+from PySide2.QtCore import QDate, QDateTime, QTime, Qt
+from PySide2.QtGui import QResizeEvent, QFocusEvent, QKeyEvent
 from PySide2.QtWidgets import QToolButton, QStyle, QCalendarWidget, QLineEdit, QDateTimeEdit
 
 from ClearableDateTimeEdit.Settings import Mode
@@ -12,6 +16,8 @@ from ClearableDateTimeEdit.popup import TimeWidget
 
 
 class ClearableDateTimeEdit(QLineEdit):
+    """ClearableDateTimeEdit contains the implementation of the DateTimeEdit widget, with which date, datetime or time
+    can be selected or entered manually and also cleared again."""
 
     dateChanged = QtCore.Signal(object)
     dateTimeChanged = QtCore.Signal(object)
@@ -55,7 +61,13 @@ class ClearableDateTimeEdit(QLineEdit):
         self.__popup.ui.nowButton.clicked.connect(self.__setToday)
         self.__popup.ui.clearButton.clicked.connect(self.__clear)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event: QResizeEvent):
+        """Moves pop-up button to the right place during the resize event.
+
+        Args:
+            event (QResizeEvent): Resize event.
+
+        """
         buttonSize = self.__popupBtn.sizeHint()
         frameWidth = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
         self.__popupBtn.move(
@@ -65,12 +77,14 @@ class ClearableDateTimeEdit(QLineEdit):
         super(ClearableDateTimeEdit, self).resizeEvent(event)
 
     def __openCalendar(self):
+        """Moves the custom calendar widget to the left side of LineEdit and shows it."""
         point = self.rect().bottomRight()
         global_point = self.mapToGlobal(point)
         self.__popup.move(global_point - QtCore.QPoint(self.width(), 0))
         self.__popup.show()
 
     def __clear(self):
+        """Removes the data entered in the LineEdit."""
         self.clear()
         self.__popup.reset()
         self.__popup.close()
@@ -78,10 +92,14 @@ class ClearableDateTimeEdit(QLineEdit):
         self.dateTimeChanged.emit(None)
 
     def __setToday(self):
+        """Sets today's date/time in the LineEdit."""
         self.__popup.setToday()
         self.__submit()
 
     def __submit(self):
+        """Validates the date/time selected in the calendar, inserts it into the LineEdit and closes the calendar
+        widget.
+        """
         dt = self.__popup.dtHelper.getDateTime()
         dt_text = dt.toString(self.__popup.dtHelper.format)
         is_valid = self.__dateTimeEdit.validate(dt_text, 0)
@@ -96,25 +114,47 @@ class ClearableDateTimeEdit(QLineEdit):
         self.__dateTimeText = dt_text
 
     def __close(self):
+        """Closes the calendar widget."""
         self.__popup.hide()
 
-    def __checkAndSendSignal(self, old_dt, new_dt):
+    def __checkAndSendSignal(self, old_dt: QDateTime, new_dt: QDateTime):
+        """Sends a signal with a date if the date of the DateTime parameter passed is different. Sends a signal with
+        time if the time of the DateTime parameter is different.
+
+        Args:
+            old_dt (QDateTime): First QDateTime.
+            new_dt (QDateTime): Second QDateTime.
+
+        """
         if not old_dt.date() == new_dt.date():
             self.dateChanged.emit(new_dt.date())
         if not old_dt.time() == new_dt.time():
             self.timeChanged.emit(new_dt.time())
 
-    def focusOutEvent(self, event):
+    def focusOutEvent(self, event: QFocusEvent):
+        """Takes over the entries in LineEdit when the focus is lost if the entries have been changed.
+
+        Args:
+            event (QFocusEvent): QFocusEvent.
+
+        """
         if self.text() != self.__dateTimeText:
             self.__editingFinished()
         super(ClearableDateTimeEdit, self).focusOutEvent(event)
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event: QKeyEvent):
+        """Takes over the entries in LineEdit when enter pressed.
+
+        Args:
+            event (QKeyEvent): QKeyEvent.
+
+        """
         if event.key() in [QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return]:
             self.__editingFinished()
         super(ClearableDateTimeEdit, self).keyPressEvent(event)
 
     def __editingFinished(self):
+        """Takes over the entries in LineEdit."""
         if not self.text():
             self.editingFinished.emit(None)
             self.__dateTimeText = ""
@@ -163,32 +203,38 @@ class ClearableDateTimeEdit(QLineEdit):
         return self.__popup.calendarWidget
 
     def clearMaximumDate(self):
+        """Resets maximum date in calendar widget."""
         self.__dateTimeEdit.clearMaximumDate()
         max_date = self.__dateTimeEdit.maximumDate()
         self.__popup.calendarWidget.setMaximumDate(max_date)
 
     def clearMaximumDateTime(self):
+        """Resets maximum date in calendar widget and maximum time in time widget."""
         self.__dateTimeEdit.clearMaximumDateTime()
         max_date = self.__dateTimeEdit.maximumDate()
         self.__popup.calendarWidget.setMaximumDate(max_date)
         self.__popup.timeWidget.clearMaximumTime()
 
     def clearMaximumTime(self):
+        """Resets maximum time in time widget."""
         self.__dateTimeEdit.clearMaximumTime()
         self.__popup.timeWidget.clearMaximumTime()
 
     def clearMinimumDate(self):
+        """Resets minimum date in calendar widget."""
         self.__dateTimeEdit.clearMinimumDate()
         min_date = self.__dateTimeEdit.minimumDate()
         self.__popup.calendarWidget.setMinimumDate(min_date)
 
     def clearMinimumDateTime(self):
+        """Resets minimum date in calendar widget and minimum time in time widget."""
         self.__dateTimeEdit.clearMinimumDateTime()
         min_date = self.__dateTimeEdit.maximumDate()
         self.__popup.calendarWidget.setMinimumDate(min_date)
         self.__popup.timeWidget.clearMinimumTime()
 
     def clearMinimumTime(self):
+        """Resets minimum time in time widget."""
         self.__dateTimeEdit.clearMinimumTime()
         self.__popup.timeWidget.clearMinimumTime()
 
@@ -198,22 +244,52 @@ class ClearableDateTimeEdit(QLineEdit):
     def currentSectionIndex(self):
         raise NotImplementedError("Not implemented yet")
 
-    def date(self):
+    def date(self) -> Union[QDate, None]:
+        """Gets current selected date or None if line edit is empty.
+
+        Returns:
+            Union[QDate, None]: Current selected date or None if line edit is empty.
+
+        """
         if not self.__dateTimeText:
             return None
         else:
             return self.__dateTimeEdit.date()
 
-    def dateTime(self):
+    def dateTime(self) -> Union[QDateTime, None]:
+        """Gets current selected datetime or None if LineEdit is empty.
+
+        Returns:
+            Union[QDateTime, None]: Current selected datetime or None if LineEdit is empty.
+
+        """
         if not self.__dateTimeText:
             return None
         else:
             return self.__dateTimeEdit.dateTime()
 
-    def displayFormat(self):
+    def displayFormat(self) -> str:
+        """Gets current display format.
+
+        Returns:
+            String: Current display format.
+
+        """
         return self.__popup.dtHelper.format
 
-    def dateTimeFromText(self, text: str):
+    def dateTimeFromText(self, text: str) -> QDateTime:
+        """Converts given text in QDateTime.
+
+        Args:
+            text (str): Text to be convert in QDateTime.
+
+        Raises:
+            TypeError if given test is not string.
+
+        Returns:
+            QDateTime from given text.
+
+        """
         if not isinstance(text, str):
             text_type = str(type(text)).split("'")[1]
             raise TypeError(
@@ -227,25 +303,67 @@ class ClearableDateTimeEdit(QLineEdit):
     def displayedSections(self):
         raise NotImplementedError("Not implemented yet")
 
-    def maximumDate(self):
+    def maximumDate(self) -> QDate:
+        """Gets maximum date as QDate.
+
+        Returns:
+            QDate: Maximum date.
+
+        """
         return self.__popup.calendarWidget.maximumDate()
 
-    def maximumDateTime(self):
+    def maximumDateTime(self) -> QDateTime:
+        """Gets maximum datetime as QDateTime.
+
+        Returns:
+            QDateTime: Maximum datetime.
+
+        """
         return self.__dateTimeEdit.maximumDateTime()
 
-    def maximumTime(self):
+    def maximumTime(self) -> QTime:
+        """Gets maximum time as QTime.
+
+        Returns:
+            QTime: Maximum time.
+
+        """
         return self.__popup.timeWidget.maximumTime()
 
-    def minimumDate(self):
+    def minimumDate(self) -> QDate:
+        """Gets minimum date as QDate.
+
+        Returns:
+            QDate: Minimum date.
+
+        """
         return self.__popup.calendarWidget.minimumDate()
 
-    def minimumDateTime(self):
+    def minimumDateTime(self) -> QDateTime:
+        """Gets minimum datetime as QDateTime.
+
+        Returns:
+            QDateTime: Minimum datetime.
+
+        """
         return self.__dateTimeEdit.minimumDateTime()
 
-    def minimumTime(self):
+    def minimumTime(self) -> QTime:
+        """Gets minimum time as QTime.
+
+        Returns:
+            QTime: Minimum time.
+
+        """
         return self.__popup.timeWidget.minimumTime()
 
-    def mode(self):
+    def mode(self) -> Mode:
+        """Gets current mode of DateTimeEdit as enum "Mode". Possible is Mode.date, Mode.datetime or Mode.time.
+
+        Returns:
+            Mode: Current mode as enum "Mode".
+
+        """
         return self.__mode
 
     def sectionAt(self, index):
@@ -261,6 +379,12 @@ class ClearableDateTimeEdit(QLineEdit):
         raise NotImplementedError("Not implemented yet")
 
     def setCalendarPopup(self, enable: bool):
+        """Enables the activation of calendar pop-up.
+
+        Args:
+            enable (bool): Flag to enable calendar pop-up. If flag is True, pop-up is activated, otherwise deactivated.
+
+        """
         self.__showPopup = enable
         if self.__showPopup:
             self.__popupBtn.setEnabled(True)
@@ -269,7 +393,13 @@ class ClearableDateTimeEdit(QLineEdit):
         else:
             self.__popupBtn.setEnabled(False)
 
-    def setCalendarWidget(self, calendarWidget):
+    def setCalendarWidget(self, calendarWidget: QCalendarWidget):
+        """Sets the given calendarWidget as the widget to be used for the calendar pop-up.
+
+        Args:
+            calendarWidget (QCalendarWidget): QCalendarWidget.
+
+        """
         self.__dateTimeEdit.setCalendarWidget(calendarWidget)
         self.__popup.calendarWidget = calendarWidget
 
@@ -280,6 +410,15 @@ class ClearableDateTimeEdit(QLineEdit):
         raise NotImplementedError("Not implemented yet")
 
     def setDate(self, date: QDate):
+        """Sets given date in calendar pop-up and line edit.
+
+        Args:
+            date (QDate): Given date.
+
+        Raises:
+            TypeError if given date is not QDate.
+
+        """
         if not isinstance(date, QDate):
             date_type = str(type(date)).split("'")[1]
             raise TypeError(
@@ -293,6 +432,16 @@ class ClearableDateTimeEdit(QLineEdit):
         self.setText(date.toString(self.__popup.dtHelper.format))
 
     def setDateRange(self, min: QDate, max: QDate):
+        """Sets minimum and maximum dates.
+
+        Args:
+            min (QDate): Minimum date.
+            max (QDate): Maximum date.
+
+        Raises:
+            TypeError if given minimum or maximum date not QDate.
+
+        """
         if not isinstance(min, QDate):
             min_type = str(type(min)).split("'")[1]
             raise TypeError(
@@ -313,6 +462,15 @@ class ClearableDateTimeEdit(QLineEdit):
         self.setMaximumDate(max)
 
     def setDateTime(self, dt: QDateTime):
+        """Sets given datetime in calendar pop-up, time widget and line edit.
+
+        Args:
+            dt (QDateTime): Given datetime.
+
+        Raises:
+            TypeError if given datetime is not QDateTime.
+
+        """
         if not isinstance(dt, QDateTime):
             dt_type = str(type(dt)).split("'")[1]
             raise TypeError(
@@ -326,7 +484,17 @@ class ClearableDateTimeEdit(QLineEdit):
         self.__popup.timeWidget.setTime(dt.time())
         self.setText(dt.toString(self.__popup.dtHelper.format))
 
-    def setDateTimeRange(self, min, max):
+    def setDateTimeRange(self, min: QDateTime, max: QDateTime):
+        """Sets minimum and maximum datetime.
+
+        Args:
+            min (QDateTime): Minimum date.
+            max (QDateTime): Maximum date.
+
+        Raises:
+            TypeError if given minimum or maximum datetime is not QDateTime.
+
+        """
         if not isinstance(min, QDateTime):
             min_type = str(type(min)).split("'")[1]
             raise TypeError(
@@ -346,37 +514,88 @@ class ClearableDateTimeEdit(QLineEdit):
         self.setMinimumDateTime(min)
         self.setMaximumDateTime(max)
 
-    def setDisplayFormat(self, format):
+    def setDisplayFormat(self, format: str):
+        """Sets the display format.
+
+        Args:
+            format (str): New display format.
+
+        """
         self.__dateTimeEdit.setDisplayFormat(format)
         self.__popup.dtHelper.format = format
 
-    def setMaximumDate(self, max):
+    def setMaximumDate(self, max: QDate):
+        """Sets maximum date in calendar pop-up.
+
+        Args:
+            max (QDate): Maximum date as QDate.
+
+        """
         self.__dateTimeEdit.setMaximumDate(max)
         self.__popup.calendarWidget.setMaximumDate(max)
 
-    def setMaximumDateTime(self, dt):
+    def setMaximumDateTime(self, dt: QDateTime):
+        """Sets maximum date in calendar pop-up and maximum time in time widget.
+
+        Args:
+            dt (QDateTime): Maximum datetime as QDateTime.
+
+        """
         self.__dateTimeEdit.setMaximumDateTime(dt)
         self.__popup.calendarWidget.setMaximumDate(dt.date())
         self.__popup.timeWidget.setMaximumTime(dt.time())
 
-    def setMaximumTime(self, max):
+    def setMaximumTime(self, max: QTime):
+        """Sets maximum time in time widget.
+
+        Args:
+            max (QTime): Maximum time as QTime.
+
+        """
         self.__dateTimeEdit.setMaximumTime(max)
         self.__popup.timeWidget.setMaximumTime(max)
 
-    def setMinimumDate(self, min):
+    def setMinimumDate(self, min: QDate):
+        """Sets minimum date in calendar pop-up.
+
+        Args:
+            min (QDate): Minimum date as QDate.
+
+        """
         self.__dateTimeEdit.setMinimumDate(min)
         self.__popup.calendarWidget.setMinimumDate(min)
 
-    def setMinimumDateTime(self, dt):
+    def setMinimumDateTime(self, dt: QDateTime):
+        """Sets minimum date in calendar pop-up and minimum time in time widget.
+
+        Args:
+            dt (QDateTime): Minimum datetime as QDateTime.
+
+        """
         self.__dateTimeEdit.setMinimumDateTime(dt)
         self.__popup.calendarWidget.setMinimumDate(dt.date())
         self.__popup.timeWidget.setMinimumTime(dt.time())
 
-    def setMinimumTime(self, min):
+    def setMinimumTime(self, min: QTime):
+        """Sets minimum time in time widget.
+
+        Args:
+            min (QTime): Minimum time as QTime.
+
+        """
         self.__dateTimeEdit.setMinimumTime(min)
         self.__popup.timeWidget.setMinimumTime(min)
 
     def setMode(self, mode: Mode):
+        """Sets mode of DateTimeEdit. Possible is Mode.date, Mode.datetime or Mode.time.
+
+        Args:
+            mode (Mode): Mode as enum "Mode".
+
+        Raises:
+            TypeError if the type of given mode is not Mode.
+
+        """
         if not isinstance(mode, Mode):
             mode_type = str(type(mode)).split("'")[1]
             raise TypeError(
@@ -393,6 +612,15 @@ class ClearableDateTimeEdit(QLineEdit):
         raise NotImplementedError("Not implemented yet")
 
     def setTime(self, time: QTime):
+        """Sets given time in time widget and line edit.
+
+        Args:
+            time (QTime): Given time.
+
+        Raises:
+            TypeError if given time is not QTime.
+
+        """
         if not isinstance(time, QTime):
             time_type = str(type(time)).split("'")[1]
             raise TypeError(
@@ -405,21 +633,55 @@ class ClearableDateTimeEdit(QLineEdit):
         self.__popup.timeWidget.setTime(time)
         self.setText(time.toString(self.__popup.dtHelper.format))
 
-    def setTimeRange(self, min, max):
+    def setTimeRange(self, min: QTime, max: QTime):
+        """Sets minimum and maximum time.
+
+        Args:
+            min (QTime): Minimum time.
+            max (QTime): Maximum time.
+
+        """
         self.setMinimumTime(min)
         self.setMaximumTime(max)
 
-    def setTimeSpec(self, spec):
+    def setTimeSpec(self, spec: Qt.TimeSpec):
+        """Sets the time specification used in this datetime to spec.
+
+        Args:
+            spec (Qt.TimeSpec): New time specification.
+
+        """
         self.__dateTimeEdit.setTimeSpec(spec)
 
-    def textFromDateTime(self, dt):
-        self.__dateTimeEdit.textFromDateTime(dt)
+    def textFromDateTime(self, dt: QDateTime) -> str:
+        """Converts given datetime in string.
 
-    def time(self):
+        Args:
+            dt (QDateTime): Datetime.
+
+        Returns:
+            Datetime as string.
+
+        """
+        return self.__dateTimeEdit.textFromDateTime(dt)
+
+    def time(self) -> Union[QTime, None]:
+        """Gets current selected time or None if line edit is empty.
+
+        Returns:
+            Union[QTime, None]: Current selected time or None if LineEdit is empty.
+
+        """
         if not self.__dateTimeText:
             return None
         else:
             return self.__dateTimeEdit.time()
 
-    def timeSpec(self):
+    def timeSpec(self) -> Qt.TimeSpec:
+        """Returns the time specification of the datetime.
+
+        Returns:
+            Qt.TimeSpec: Time specification.
+
+        """
         return self.__dateTimeEdit.timeSpec()

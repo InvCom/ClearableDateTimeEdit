@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'datetime1.ui',
-# licensing of 'datetime1.ui' applies.
-#
-# Created: Mon Oct 11 17:58:33 2021
-#      by: pyside2-uic  running on PySide2 5.13.2
-#
-# WARNING! All changes made in this file will be lost!
+"""This module contains implementation of calendar pop-ups ui."""
 
 __all__ = ["DateTimePopupUi"]
 
 from PySide2 import QtCore, QtWidgets
 from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QWidget
 
 from ClearableDateTimeEdit.popup.TimeWidget import TimeWidget
 
 
 class DateTimePopupUi(object):
+    """This class contains layout of calendar pop-ups ui."""
     def __init__(self):
         super(DateTimePopupUi, self).__init__()
 
-    def setupUi(self, Form):
+    def setupUi(self, Form: QWidget):
+        """Creates ui for given widget.
+
+        Args:
+            Form (QWidget): widget.
+
+        """
         Form.setObjectName("Form")
         Form.setWindowFlags(Qt.Popup)
         Form.resize(510, 235)
@@ -73,7 +74,13 @@ class DateTimePopupUi(object):
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, Form: QWidget):
+        """Retranslates ui for given widget.
+
+        Args:
+            Form (QWidget): widget.
+
+        """
         Form.setWindowTitle(QtWidgets.QApplication.translate("Form", "Form", None, -1))
         self.nowButton.setText(QtWidgets.QApplication.translate("Form", "Now", None, -1))
         self.clearButton.setText(QtWidgets.QApplication.translate("Form", "Clear", None, -1))

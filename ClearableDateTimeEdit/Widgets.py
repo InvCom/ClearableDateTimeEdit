@@ -127,9 +127,9 @@ class ClearableDateTimeEdit(QLineEdit):
             new_dt (QDateTime): Second QDateTime.
 
         """
-        if not old_dt.date() == new_dt.date():
+        if old_dt.date() != new_dt.date():
             self.dateChanged.emit(new_dt.date())
-        if not old_dt.time() == new_dt.time():
+        if old_dt.time() != new_dt.time():
             self.timeChanged.emit(new_dt.time())
 
     def focusOutEvent(self, event: QFocusEvent):

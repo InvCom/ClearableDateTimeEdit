@@ -24,13 +24,11 @@ class TimeWidget(QWidget):
         self.init_ui()
         self.__maximumTime = QTime(23, 59, 59, 999)
         self.__minimumTime = QTime(0, 0, 0, 0)
-        # self._timeSpec = Qt.TimeSpec.LocalTime
         self.setupTime()
 
     def init_ui(self):
         """Initializes ui layout."""
         self.setObjectName("TimeWidget")
-        # self.resize(200, 210)
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -54,7 +52,7 @@ class TimeWidget(QWidget):
         font.setBold(True)
         self.timeLabel.setFont(font)
         self.timeLabel.setStyleSheet(
-            "background-color: rgb(0, 122, 212);\n" "color: rgb(255, 255, 255);\n" "margin: 0px;"
+            "background-color: rgb(0, 122, 212);\ncolor: rgb(255, 255, 255);\nmargin: 0px;"
         )
         self.timeLabel.setAlignment(Qt.AlignCenter)
         self.timeLabel.setObjectName("timeLabel")

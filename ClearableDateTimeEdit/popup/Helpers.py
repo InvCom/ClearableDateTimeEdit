@@ -169,7 +169,7 @@ class CustomDateHelper(AbstractHelper):
             if not dt.isValid():
                 return False
             return True
-        except:
+        except Exception:
             return False
 
 
@@ -254,7 +254,7 @@ class CustomTimeHelper(AbstractHelper):
             if not dt.isValid():
                 return False
             return True
-        except:
+        except Exception:
             return False
 
 
@@ -347,5 +347,5 @@ class CustomDateTimeHelper(AbstractHelper):
             if not dt.isValid():
                 return False
             return True
-        except:
+        except Exception:
             return False

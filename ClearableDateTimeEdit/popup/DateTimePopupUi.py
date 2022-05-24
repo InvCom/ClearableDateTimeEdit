@@ -8,6 +8,8 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+__all__ = ["DateTimePopupUi"]
+
 from PySide2 import QtCore, QtWidgets
 from PySide2.QtCore import Qt
 

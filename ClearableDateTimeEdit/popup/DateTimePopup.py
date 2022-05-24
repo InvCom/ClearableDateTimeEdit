@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
+__all__ = ["DateTimePopup"]
 from PySide2.QtCore import QObject, QDate
 from PySide2.QtWidgets import QWidget, QCalendarWidget
 
 from ClearableDateTimeEdit.Settings import Mode
-from ClearableDateTimeEdit.popup.DateTimePopupUi import DateTimePopupUi
+from ClearableDateTimeEdit.popup.DateTimePopupUi import DateTimePopupUi as _DateTimePopupUi
 from ClearableDateTimeEdit.popup.Helpers import CustomTimeHelper, CustomDateTimeHelper, CustomDateHelper
 
 
 class DateTimePopup(QWidget):
     def __init__(self, mode, parent):
         super(DateTimePopup, self).__init__(parent)
-        self.ui = DateTimePopupUi()
+        self.ui = _DateTimePopupUi()
         self.ui.setupUi(self)
         self.__mode = mode
         self.__dtHelper = self._getDtHelper()

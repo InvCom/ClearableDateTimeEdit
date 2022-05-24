@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 
+__all__ = ["ClearableDateTimeEdit"]
+
 from PySide2 import QtCore, QtGui
 from PySide2.QtCore import QDate, QDateTime, QTime
 from PySide2.QtWidgets import QToolButton, QStyle, QCalendarWidget, QLineEdit, QDateTimeEdit
 
 from ClearableDateTimeEdit.Settings import Mode
-from ClearableDateTimeEdit.popup.DateTimePopup import DateTimePopup
-from ClearableDateTimeEdit.popup.TimeWidget import TimeWidget
+from ClearableDateTimeEdit.popup import DateTimePopup
+from ClearableDateTimeEdit.popup import TimeWidget
 
 
-class DateTimeEdit(QLineEdit):
+class ClearableDateTimeEdit(QLineEdit):
 
     dateChanged = QtCore.Signal(object)
     dateTimeChanged = QtCore.Signal(object)
@@ -17,7 +19,7 @@ class DateTimeEdit(QLineEdit):
     timeChanged = QtCore.Signal(object)
 
     def __init__(self, parent=None, mode: Mode = Mode.datetime):
-        super(DateTimeEdit, self).__init__(parent)
+        super(ClearableDateTimeEdit, self).__init__(parent)
         self.__mode = mode
         self.__showPopup = True
         self.__popup = DateTimePopup(self.__mode, self)
@@ -60,7 +62,7 @@ class DateTimeEdit(QLineEdit):
             self.rect().right() - frameWidth - buttonSize.width(),
             (self.rect().bottom() - buttonSize.height() + 1) / 2,
         )
-        super(DateTimeEdit, self).resizeEvent(event)
+        super(ClearableDateTimeEdit, self).resizeEvent(event)
 
     def __openCalendar(self):
         point = self.rect().bottomRight()
@@ -105,12 +107,12 @@ class DateTimeEdit(QLineEdit):
     def focusOutEvent(self, event):
         if self.text() != self.__dateTimeText:
             self.__editingFinished()
-        super(DateTimeEdit, self).focusOutEvent(event)
+        super(ClearableDateTimeEdit, self).focusOutEvent(event)
 
     def keyPressEvent(self, event):
         if event.key() in [QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return]:
             self.__editingFinished()
-        super(DateTimeEdit, self).keyPressEvent(event)
+        super(ClearableDateTimeEdit, self).keyPressEvent(event)
 
     def __editingFinished(self):
         if not self.text():

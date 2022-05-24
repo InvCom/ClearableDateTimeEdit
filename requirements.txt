@@ -1,0 +1,10 @@
+# Developer's dependencies you should always use
+# pip install -r requirements.txt for developers to install the build-system dependencies and some linting tools
+# Build Systems should rely on pyproject.toml and PEP517 PEP518
+#
+# $ pip install -r requirements.txt
+# $ pip install --upgrade -r requirements.txt
+
+mypy
+pylint
+setuptools>=49.3.1

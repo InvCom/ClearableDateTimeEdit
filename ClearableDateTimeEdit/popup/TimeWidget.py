@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+__all__ = ["TimeWidget"]
 from PySide2.QtCore import QSize, Qt, QTime
 from PySide2.QtGui import QFont, QIntValidator
 from PySide2.QtWidgets import (

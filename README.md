@@ -42,9 +42,9 @@ self.date_time_edit.setObjectName(u"ClearableDateTimeEdit")
 self.layout.addWidget(self.date_time_edit)
 ```
 Three modes are possible:
- - Mode.datetime
- - Mode.date
- - Mode.time.
+ - Mode.datetime<br>![datetime](https://user-images.githubusercontent.com/94013405/170215259-58930e55-2528-449f-900a-98efec622702.png)
+ - Mode.date<br>![date](https://user-images.githubusercontent.com/94013405/170215342-a29914a5-8fd1-4718-a785-9c8f7daef683.png)
+ - Mode.time<br>![time](https://user-images.githubusercontent.com/94013405/170215369-5688e830-3e88-4905-abd1-6e3c657cfcab.png)
 
 The calendar and time widgets are displayed as a pop-up. The display can be deactivated and the input can be changed to 
 keyboard input only.

@@ -1,0 +1,54 @@
+# -*- coding: utf-8 -*-
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ClearableDateTimeEdit"
+description = "Custom DateTimeEdit widget based on PySide2's QDateTimeEdit and QEditLine with option to clear the selected date"
+authors = [
+    { name = "Dimitri Schneider", email = "dimitri.schneider@invensity.com" }
+]
+version = "0.1.0"
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "PySide2==5.15.2",
+]
+
+[tool.black]
+# Use single quotes and regex, for info see: https://black.readthedocs.io/en/stable/pyproject_toml.html.
+# Skip string normalization because of error 123 while reformatting Core.py
+#skip-string-normalization = true
+verbose = false
+line-length = 120
+target-version = ['py39']
+include = '\.pyi?$'
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.svn
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
+'''
+
+# isort config to be compatible with black, it should be defined 1 time here in pyproject.toml
+[tool.isort]
+profile = "black"
+multi_line_output = 3

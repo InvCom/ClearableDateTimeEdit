@@ -1,0 +1,89 @@
+# -*- coding: utf-8 -*-
+"""This module contains implementation of calendar pop-ups ui."""
+
+__all__ = ["DateTimePopupUi"]
+
+from PySide2 import QtCore, QtWidgets
+from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QWidget
+
+from ClearableDateTimeEdit.popup.TimeWidget import TimeWidget
+
+
+class DateTimePopupUi(object):
+    """This class contains layout of calendar pop-ups ui."""
+
+    def __init__(self):
+        super(DateTimePopupUi, self).__init__()
+
+    def setupUi(self, Form: QWidget):
+        """Creates ui for given widget.
+
+        Args:
+            Form (QWidget): widget.
+
+        """
+        Form.setObjectName("Form")
+        Form.setWindowFlags(Qt.Popup)
+        Form.resize(510, 235)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
+        Form.setSizePolicy(sizePolicy)
+        # Form.setMinimumSize(QtCore.QSize(510, 235))
+        Form.setMaximumSize(QtCore.QSize(500, 235))
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(Form)
+        self.verticalLayout_3.setContentsMargins(4, 2, 4, 2)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.calendarWidget = QtWidgets.QCalendarWidget(Form)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.calendarWidget.sizePolicy().hasHeightForWidth())
+        self.calendarWidget.setSizePolicy(sizePolicy)
+        self.calendarWidget.setMaximumSize(QtCore.QSize(312, 16777215))
+        self.calendarWidget.setStyleSheet("margin: 0px;")
+        self.calendarWidget.setObjectName("calendarWidget")
+        self.horizontalLayout_2.addWidget(self.calendarWidget)
+        self.timeWidget = TimeWidget(Form)
+        self.horizontalLayout_2.addWidget(self.timeWidget)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.nowButton = QtWidgets.QPushButton(Form)
+        self.nowButton.setObjectName("pushButton")
+        self.horizontalLayout.addWidget(self.nowButton)
+        self.clearButton = QtWidgets.QPushButton(Form)
+        self.clearButton.setObjectName("pushButton_2")
+        self.horizontalLayout.addWidget(self.clearButton)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
+        self.submitButton = QtWidgets.QPushButton(Form)
+        self.submitButton.setObjectName("pushButton_3")
+        self.horizontalLayout.addWidget(self.submitButton)
+        self.cancelButton = QtWidgets.QPushButton(Form)
+        self.cancelButton.setObjectName("pushButton_4")
+        self.horizontalLayout.addWidget(self.cancelButton)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.verticalLayout_3.addLayout(self.verticalLayout_2)
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def retranslateUi(self, Form: QWidget):
+        """Retranslates ui for given widget.
+
+        Args:
+            Form (QWidget): widget.
+
+        """
+        Form.setWindowTitle(QtWidgets.QApplication.translate("Form", "Form", None, -1))
+        self.nowButton.setText(QtWidgets.QApplication.translate("Form", "Now", None, -1))
+        self.clearButton.setText(QtWidgets.QApplication.translate("Form", "Clear", None, -1))
+        self.submitButton.setText(QtWidgets.QApplication.translate("Form", "Ok", None, -1))
+        self.cancelButton.setText(QtWidgets.QApplication.translate("Form", "Cancel", None, -1))
